@@ -254,11 +254,11 @@ window.onload = () => {
     },{once: true});
     assert_true(popover.matches(':popover-open'));
     assert_true(other_popover.matches(':popover-open'));
-    assert_throws_dom('InvalidStateError', () => popover.hidePopover());
+    popover.hidePopover();
     assert_false(other_popover.matches(':popover-open'),'unrelated popover is hidden');
     assert_false(popover.matches(':popover-open'),'popover is still hidden if its type changed during hide event');
-    assert_throws_dom("InvalidStateError",() => other_popover.hidePopover(),'Nested popover should already be hidden');
-  },`Changing the popover type in a "beforetoggle" event handler should throw an exception (during hidePopover())`);
+    other_popover.hidePopover();
+  },`Changing the popover type in a "beforetoggle" event handler during hidePopover() should not throw an exception`);
 
   function interpretedType(typeString,method) {
     if (validTypes.includes(typeString))

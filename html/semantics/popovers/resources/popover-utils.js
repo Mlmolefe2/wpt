@@ -47,6 +47,24 @@ async function sendEnter() {
 function isElementVisible(el) {
   return !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
 }
+function isTopLayer(el) {
+  // A bit of a hack. Just test a few properties of the ::backdrop pseudo
+  // element that change when in the top layer.
+  const properties = ['right','background'];
+  const nonTopLayerValues = properties.map(p => {
+    const testEl = document.createElement('div');
+    document.body.appendChild(testEl);
+    const val = getComputedStyle(testEl, '::backdrop')[p];
+    testEl.remove();
+    return val;
+  });
+  for(let i=0;i<properties.length;++i) {
+    if (getComputedStyle(el,'::backdrop')[properties[i]] !== nonTopLayerValues[i]) {
+      return true;
+    }
+  }
+  return false;
+}
 async function finishAnimations(popover) {
   popover.getAnimations({subtree: true}).forEach(animation => animation.finish());
   await waitForRender();

@@ -1,0 +1,17 @@
+<!doctype html>
+<body>
+  <script src=/resources/testharness.js></script>
+  <script src=/resources/testharnessreport.js></script>
+  <script>
+    promise_test(async t => {
+      try {
+        let response = await fetch('./resources/empty.html', {adAuctionHeaders: true});
+      } catch (e) {
+        assert_equals(e.name, 'TypeError');
+        assert_equals(e.message, 'Failed to execute \'fetch\' on \'Window\': adAuctionHeaders: ad auction operations are only available in secure contexts.');
+        return;
+      }
+      assert_unreached("did not reject");
+    }, 'test fetch(<url>, {adAuctionHeaders: true}) in insecure context');
+  </script>
+</body>
